@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
-#include <queue>
 
 int task1(const std::string &s) {
     int sum = 0;
