@@ -4,53 +4,50 @@
 #include <unordered_map>
 #include <algorithm>
 
-int task1(std::vector<int> &lc, std::vector<int> &rc) {
-    int d = 0;
-    std::sort(lc.begin(), lc.end());
-    std::sort(rc.begin(), rc.end());
+int task1(std::vector<int> &left_column, std::vector<int> &right_column) {
+    int distance = 0;
+    std::sort(left_column.begin(), left_column.end());
+    std::sort(right_column.begin(), right_column.end());
 
-    for (int i = 0; i < std::min(lc.size(), rc.size()); ++i) {
-        d += std::abs(lc[i] - rc[i]);
+    for (int i = 0; i < std::min(left_column.size(), right_column.size()); ++i) {
+        distance += std::abs(left_column[i] - right_column[i]);
     }
 
-    return d;
+    return distance;
 }
 
-int task2(const std::vector<int> &lc, const std::vector<int> &rc) {
-    int s = 0;
-    std::unordered_map<int, int> rc_count;
+int task2(const std::vector<int> &left_column, const std::vector<int> &right_column) {
+    int similarity_score = 0;
+    std::unordered_map<int, int> right_column_count;
 
-    for (int re : rc) {
-        rc_count[re]++;
+    for (int location_id: right_column) {
+        right_column_count[location_id]++;
     }
 
-    for (int le : lc) {
-        s += le * rc_count[le];
+    for (int location_id: left_column) {
+        similarity_score += location_id * right_column_count[location_id];
     }
 
-    return s;
+    return similarity_score;
 }
 
 int main() {
-    std::ifstream f("Day1/day1_input.txt");
-    if (!f.is_open()) {
+    std::ifstream file("Day1/day1_input.txt");
+    if (!file.is_open()) {
         std::cerr << "Error opening the file!" << std::endl;
         return -1;
     }
 
-    std::vector<int> lc, rc;
-    int l, r;
-    while (f >> l >> r) {
-        lc.push_back(l);
-        rc.push_back(r);
+    std::vector<int> left_column, right_column;
+    int left, right;
+    while (file >> left >> right) {
+        left_column.push_back(left);
+        right_column.push_back(right);
     }
-    f.close();
+    file.close();
 
-    int r1 = task1(lc, rc);
-    int r2 = task2(lc, rc);
-
-    std::cout << "Task 1: " << r1 << std::endl;
-    std::cout << "Task 2: " << r2 << std::endl;
+    std::cout << "Task 1: " << task1(left_column, right_column) << std::endl;
+    std::cout << "Task 2: " << task2(left_column, right_column) << std::endl;
 
     return 0;
 }
